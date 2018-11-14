@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  server:
+    build: ./server
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./server:/data
+    env_file:
+      - ./.env
+
