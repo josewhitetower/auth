@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const cors = require('cors');
 const helmet = require('helmet');
+const path = require('path');
 const databaseConfig = require('./config/db');
 
 
@@ -22,7 +23,7 @@ const app = express();
 
 app.use(helmet());
 app.use(cors()); // if the front end is in the same server, it's not needed
-app.use(express.static('build'));
+app.use(express.static(path.join(__dirname, 'build')));
 app.use('/uploads',express.static('uploads'));
 //BodyParser middleware
 // parse application/x-www-form-urlencoded
