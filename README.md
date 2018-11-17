@@ -7,6 +7,17 @@
 5. Passport.js
 6. Docker
 7. Jest
+8. ReactJS
+9. MaterializeCSS
+
+## User stories
+1. An user can sign up.
+2. An user can log in.
+3. An user can see listed users
+4. An user can see his/her/they profile
+5. An user can edit his/her/they profile
+6. An user can change his/her/they password
+7. An user can delete his/her/they account
 
 
 A .env file is needed in root folder with the following content
