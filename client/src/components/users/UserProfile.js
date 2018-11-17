@@ -39,7 +39,6 @@ class UserProfile extends Component {
 
     render() {
     	const {user} = this.state;
-		
     	const showChangePassword = this.state.showPassword ? 
     		(
     			<form onSubmit={this.handleChangePassword} className="white">
