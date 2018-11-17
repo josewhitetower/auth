@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {updateUser, changePassword} from '../../store/actions/userActions';
+import {updateUser, changePassword, deleteAccount} from '../../store/actions/userActions';
 import { Redirect } from 'react-router-dom';
 
 //TODO: Find a better way to work with edit forms: Not setting the state to a form in the constructor
@@ -9,6 +9,7 @@ class UserProfile extends Component {
 		super(props);
 		this.state = {
 			showPassword: false,
+			showDelete: false,
 			user: props.user,
 		};
 	}
@@ -16,6 +17,10 @@ class UserProfile extends Component {
 	handlePasswordChange = (e) => {	
 		const showPassword = e.target.type === 'checkbox' ? e.target.checked : e.target.value;	
     	this.setState({showPassword});	
+	}	
+	handleShowDelete = (e) => {	
+		const showDelete = e.target.type === 'checkbox' ? e.target.checked : e.target.value;	
+    	this.setState({showDelete});	
 	}	
 
 	handleUserChange = (e) => {
@@ -36,9 +41,16 @@ class UserProfile extends Component {
     	e.preventDefault();
     	this.props.changePassword(this.state.user);
     }
+	
+    handleDeleteAccount = (e) =>{
+    	e.preventDefault();
+    	this.props.deleteAccount(this.state.user, this.props);
+    }
 
     render() {
     	const {user} = this.state;
+    						
+    	const showDelete = this.state.showDelete ? <button className="btn black lighten-2" onClick={this.handleDeleteAccount}>Delete Account</button> : null;
     	const showChangePassword = this.state.showPassword ? 
     		(
     			<form onSubmit={this.handleChangePassword} className="white">
@@ -83,6 +95,7 @@ class UserProfile extends Component {
     							{this.props.error} 
     						</div>
     					</div>
+    					
     					<div className="switch">	
     						<label>	
     							<input type="checkbox" checked={this.state.showPassword} onChange={this.handlePasswordChange}/>	
@@ -90,9 +103,17 @@ class UserProfile extends Component {
 							Change Password	
     						</label>	
     					</div>
+    					<div className="switch">	
+    						<label>	
+    							<input type="checkbox" checked={this.state.showDelete} onChange={this.handleShowDelete}/>	
+    							<span className="lever" ></span>	
+							Delete Account
+    						</label>	
+    					</div>
 					
     				</form>
     				{showChangePassword}
+    				{showDelete}
     			</div>
     		) : 
     		(
@@ -115,9 +136,10 @@ const mapStateToProps = (state) => {
 	};
 };
 
-const mapDispatchToProps = (dispatch) =>{
+const mapDispatchToProps = (dispatch, ownProps) =>{
 	return {
 	  updateUser: (user)=> dispatch(updateUser(user)),
+	  deleteAccount: (user)=> dispatch(deleteAccount(user, ownProps)),
 	  changePassword: (user)=> dispatch(changePassword(user))
 	};
 };

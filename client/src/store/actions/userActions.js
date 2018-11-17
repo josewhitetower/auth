@@ -103,7 +103,29 @@ export const updateUser = (user) => {
 					const errors = error.response.data.errors.map(err => err.msg).join(', ');
 					dispatch(setError(errors));
 				}
-			});;
+			});
+	};
+};
+export const deleteAccount = (user, ownProps) => {
+	return(dispatch) => {
+		axios.delete(`${url}/api/users/` + user._id,{
+			headers: {
+				Authorization: localStorage.getItem('token')
+			}
+		})
+			.then((response) => {
+				dispatch(logOut());
+				showToast(response.data.message.text);
+				ownProps.history.push('/');
+			}).catch((error)=> {
+				if (error.message) {
+					console.log(error.message);
+				}
+				if(error.response && error.response.data.errors) {
+					const errors = error.response.data.errors.map(err => err.msg).join(', ');
+					dispatch(setError(errors));
+				}
+			});
 	};
 };
 

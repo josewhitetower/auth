@@ -32,7 +32,7 @@ class SignIn extends Component {
     					<input type ="email" id="email" required onChange ={this.handleChange}/>
     				</div>
     				<div className="input-field">
-    					<label htmlFor="password"></label>
+    					<label htmlFor="password">Password</label>
     					<input type="password" id="password" required onChange ={this.handleChange}/>
     				</div>
     				<div className="input-field">
