@@ -10,14 +10,14 @@
 8. ReactJS
 9. MaterializeCSS
 
-## User stories
-1. An user can sign up.
-2. An user can log in.
-3. An user can see listed users
-4. An user can see his/her/they profile
-5. An user can edit his/her/they profile
-6. An user can change his/her/they password
-7. An user can delete his/her/they account
+## User stories:
+1. User can sign up.
+2. User can sign in.
+3. User can see listed users
+4. User can see his profile
+5. User can edit his profile
+6. User can change his password
+7. User can delete his account
 
 
 A .env file is needed in root folder with the following content
