@@ -130,17 +130,6 @@ module.exports = {
 		res.status(200).json({ user: req.user, isAuthenticated: req.isAuthenticated() });
 	},
     
-	logout(req, res) {
-		res.status(200).json({
-			isAuthenticated: req.isAuthenticated(),
-			message: {
-				type: 'success',
-				text: 'User succesfully logged out',
-			},
-		});
-		req.logout();
-	},
-    
 	edit(req, res){
 		User.findByIdAndUpdate(req.params.id, req.body, {new:true})
 			.then(user => res.status(200).json({
@@ -184,7 +173,11 @@ module.exports = {
 							}
 							else {
 								res.status(200).json({
-									user: user
+									user,
+									message: {
+										type: 'success',
+										text: 'Password changed succesfully',
+									}
 								});
 							}
 						});

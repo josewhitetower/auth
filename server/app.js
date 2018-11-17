@@ -16,7 +16,7 @@ db.on('open', ()=>{
 });
 //check for DB errors
 db.on('error', (error)=>{
-	console.log('DATABASE ERROR', error);
+	console.log('DATABASE ERROR', error.message);
 });
 const app = express();
 

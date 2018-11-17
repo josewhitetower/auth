@@ -20,8 +20,6 @@ router.post('/register', upload.single('userImage'), validations.register(check)
 
 router.get('/profile', passport.authenticate('jwt', { session: false }), UserController.profile);
 
-router.get('/logout', UserController.logout);
-
 router.put('/changepassword', passport.authenticate('jwt', { session: false }), confirmPassword, UserController.changePassword);
 
 router.put('/:id',passport.authenticate('jwt', { session: false }), UserController.edit);

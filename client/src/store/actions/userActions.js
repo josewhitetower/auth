@@ -2,6 +2,10 @@ import * as types from '../constants/ActionTypes';
 import axios from 'axios';
 
 const url =  process.env.NODE_ENV === 'development' ?'http://localhost:8081': '';
+
+const showToast = (text) => {
+	window.M.toast({html: text, classes:'green lighten-1'});
+};
 export const setUser = (user)=> {
 	return {
 		type:types.SET_USER,
@@ -37,6 +41,7 @@ export const signUp = (user, ownProps) => {
 				dispatch(setUser(response.data.user));
 				localStorage.setItem('token', response.data.token);
 				ownProps.history.push('/');
+				showToast(response.data.message.text);
 			}).catch((error)=> {
 				if(error.response.data.errors) {
 					const errors = error.response.data.errors.map(err => err.msg).join(', ');
@@ -53,6 +58,7 @@ export const signIn = (credentials, ownProps) => {
 				dispatch(setUser(response.data.user));
 				localStorage.setItem('token', response.data.token);
 				ownProps.history.push('/');
+				showToast(response.data.message.text);
 			}).catch((error)=> {
 				if(error.response.data.errors) {
 					const errors = error.response.data.errors.map(err => err.msg).join(', ');
@@ -88,6 +94,7 @@ export const updateUser = (user) => {
 		})
 			.then((response) => {
 				dispatch(setUser(response.data.user));
+				showToast(response.data.message.text);
 			}).catch((error)=> {
 				if (error.message) {
 					console.log(error.message);
@@ -110,6 +117,7 @@ export const changePassword = (user) => {
 			})
 				.then((response) => {
 					dispatch(setUser(response.data.user));
+					showToast(response.data.message.text);
 				}).catch((error)=> {
 					if (error.message) {
 						console.log(error.message);
