@@ -99,3 +99,26 @@ export const updateUser = (user) => {
 			});;
 	};
 };
+
+export const changePassword = (user) => {
+	if (user.currentPassword && user.newPassword) {
+		return(dispatch) => {
+			axios.put(`${url}/api/users/changepassword`, user, {
+				headers: {
+					Authorization: localStorage.getItem('token')
+				}
+			})
+				.then((response) => {
+					dispatch(setUser(response.data.user));
+				}).catch((error)=> {
+					if (error.message) {
+						console.log(error.message);
+					}
+					if(error.response && error.response.data.errors) {
+						const errors = error.response.data.errors.map(err => err.msg).join(', ');
+						dispatch(setError(errors));
+					}
+				});;
+		};
+	}
+};

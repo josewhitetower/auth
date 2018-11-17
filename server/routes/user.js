@@ -8,6 +8,7 @@ const upload = require('../config/multer');
 
 const UserController = require('../controllers/user');
 const validations = require('../validations');
+const confirmPassword = require('../middleware/confirmPassword');
 
 
 router.get('/', UserController.all);
@@ -20,6 +21,8 @@ router.post('/register', upload.single('userImage'), validations.register(check)
 router.get('/profile', passport.authenticate('jwt', { session: false }), UserController.profile);
 
 router.get('/logout', UserController.logout);
+
+router.put('/changepassword', passport.authenticate('jwt', { session: false }), confirmPassword, UserController.changePassword);
 
 router.put('/:id',passport.authenticate('jwt', { session: false }), UserController.edit);
 

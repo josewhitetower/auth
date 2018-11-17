@@ -161,5 +161,35 @@ module.exports = {
 					text: `User "${user.firstName}" deleted succesfully`,
 				}}))
 			.catch(err => res.send({err: err}));
-	}
+	},
+
+	changePassword(req, res) {
+		const {newPassword} = req.body;
+		User.findById(req.body._id)
+			.then(user => {
+				bcrypt.genSalt(10, (_, salt) => {
+					bcrypt.hash(newPassword, salt, (err, hash) => {
+						if (err) {
+							console.log('BCRYPT HASH ERROR',err);
+						}
+						user.password = hash;
+
+						user.save((err) => {
+							if (err) {
+								res.status(500).json({
+									errors: [{msg:'Problem saving user'}],									
+									err,
+								});
+								throw err;
+							}
+							else {
+								res.status(200).json({
+									user: user
+								});
+							}
+						});
+					});
+				});
+			});
+	}		
 };
