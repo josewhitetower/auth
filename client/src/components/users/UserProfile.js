@@ -75,7 +75,7 @@ class UserProfile extends Component {
     			<div className= "forms">
 
     				<form onSubmit={this.handleSubmit} className="white">
-    					<h5 className="grey-text text-darken-3">Sign Up</h5>
+    					<h5 className="grey-text text-darken-3">User Profile</h5>
     					<div className="input-field">
     						<label htmlFor="email" className="active">Email</label>
     						<input type ="email" id="email" required onChange ={this.handleUserChange} defaultValue={user.email}/>
