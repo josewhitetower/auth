@@ -98,8 +98,8 @@ export const updateUser = (user, ownProps) => {
 			}).catch((error)=> {
 				if (error.message) {
 					if (error.response.status === 401 || error.response.status === 403) {
-						ownProps.history.push('/');
 						dispatch(logOut());
+						ownProps.history.push('/signin');
 					} else {
 						dispatch(setError(error.response.statusText));
 					}
@@ -125,8 +125,8 @@ export const deleteAccount = (user, ownProps) => {
 			}).catch((error)=> {
 				if (error.message) {
 					if (error.response.status === 401 || error.response.status === 403) {
-						ownProps.history.push('/');
 						dispatch(logOut());
+						ownProps.history.push('/signin');
 					} else {
 						dispatch(setError(error.response.statusText));
 					}
@@ -153,8 +153,8 @@ export const changePassword = (user, ownProps) => {
 				}).catch((error)=> {
 					if (error.message) {
 						if (error.response.status === 401 || error.response.status === 403) {
-							ownProps.history.push('/');
 							dispatch(logOut());
+							ownProps.history.push('/signin');
 						} else {
 							dispatch(setError(error.response.statusText));
 						}
