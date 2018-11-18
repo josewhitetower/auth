@@ -34,12 +34,12 @@ class UserProfile extends Component {
 
     handleSubmit = (e) =>{
     	e.preventDefault();
-    	this.props.updateUser(this.state.user);
+    	this.props.updateUser(this.state.user, this.props);
     }
 	
     handleChangePassword = (e) =>{
     	e.preventDefault();
-    	this.props.changePassword(this.state.user);
+    	this.props.changePassword(this.state.user, this.props);
     }
 	
     handleDeleteAccount = (e) =>{
@@ -138,9 +138,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) =>{
 	return {
-	  updateUser: (user)=> dispatch(updateUser(user)),
+	  updateUser: (user)=> dispatch(updateUser(user, ownProps)),
 	  deleteAccount: (user)=> dispatch(deleteAccount(user, ownProps)),
-	  changePassword: (user)=> dispatch(changePassword(user))
+	  changePassword: (user)=> dispatch(changePassword(user, ownProps))
 	};
 };
 

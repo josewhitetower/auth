@@ -85,7 +85,7 @@ export const getAllUsers = () => {
 	};
 };
 
-export const updateUser = (user) => {
+export const updateUser = (user, ownProps) => {
 	return(dispatch) => {
 		axios.put(`${url}/api/users/` + user._id, user, {
 			headers: {
@@ -97,7 +97,12 @@ export const updateUser = (user) => {
 				showToast(response.data.message.text);
 			}).catch((error)=> {
 				if (error.message) {
-					dispatch(setError(error.response.statusText));
+					if (error.response.status === 401 || error.response.status === 403) {
+						ownProps.history.push('/');
+						dispatch(logOut());
+					} else {
+						dispatch(setError(error.response.statusText));
+					}
 				}
 				if(error.response && error.response.data.errors) {
 					const errors = error.response.data.errors.map(err => err.msg).join(', ');
@@ -119,7 +124,12 @@ export const deleteAccount = (user, ownProps) => {
 				ownProps.history.push('/');
 			}).catch((error)=> {
 				if (error.message) {
-					dispatch(setError(error.response.statusText));
+					if (error.response.status === 401 || error.response.status === 403) {
+						ownProps.history.push('/');
+						dispatch(logOut());
+					} else {
+						dispatch(setError(error.response.statusText));
+					}
 				}
 				if(error.response && error.response.data.errors) {
 					const errors = error.response.data.errors.map(err => err.msg).join(', ');
@@ -129,7 +139,7 @@ export const deleteAccount = (user, ownProps) => {
 	};
 };
 
-export const changePassword = (user) => {
+export const changePassword = (user, ownProps) => {
 	if (user.currentPassword && user.newPassword) {
 		return(dispatch) => {
 			axios.put(`${url}/api/users/changepassword`, user, {
@@ -142,7 +152,12 @@ export const changePassword = (user) => {
 					showToast(response.data.message.text);
 				}).catch((error)=> {
 					if (error.message) {
-						dispatch(setError(error.response.statusText));
+						if (error.response.status === 401 || error.response.status === 403) {
+							ownProps.history.push('/');
+							dispatch(logOut());
+						} else {
+							dispatch(setError(error.response.statusText));
+						}
 					}
 					if(error.response && error.response.data.errors) {
 						const errors = error.response.data.errors.map(err => err.msg).join(', ');
