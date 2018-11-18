@@ -32,7 +32,7 @@ describe('USER REST API', () => {
 			expect(response.body.token).toBeTruthy();
 			//save the token for later
 			requestParams.token = response.body.token;
-			requestParams.id = response.body.user._id;
+			requestParams._id = response.body.user._id;
 		});
 	});
 
@@ -56,29 +56,48 @@ describe('USER REST API', () => {
 				expect(response.statusCode).toBe(200);
 				expect(response.body.isAuthenticated).toBe(true);
 				expect(response.body.user.email).toEqual(requestParams.email);
-			
+				
+			});
+		});
+
+	test('7. It should  allow to change password ', () => {
+		const currentPassword = requestParams.password;
+		const newPassword = 'user2';
+		const user = {
+			...requestParams,
+			currentPassword,
+			newPassword,
+		}	
+		
+		return request(app).put('/api/users/changepassword')
+			.set('Authorization', requestParams.token)
+			.send(user)
+			.then((response)=> {
+				expect(response.statusCode).toBe(200);
+				expect(response.body.user._id).toEqual(requestParams._id);
 			});
 	});
 
-	test('7. It should  allow to edit an user ', () => {
+	test('8. It should  allow to edit an user ', () => {
 		const newEmail = 'user12@email.com';						
-		return request(app).put('/api/users/' + requestParams.id)
+		return request(app).put('/api/users/' + requestParams._id)
 			.set('Authorization', requestParams.token)
 			.send({email:newEmail})
 			.then((response)=> {
 				expect(response.statusCode).toBe(200);
 				expect(response.body.user.email).toEqual(newEmail);
-				expect(response.body.user._id).toEqual(requestParams.id);
+				expect(response.body.user._id).toEqual(requestParams._id);
 			
 			});
 	});
-	test('8. It should  allow to delete an user ', () => {
+
+	test('9. It should  allow to delete an user ', () => {
 							
-		return request(app).delete('/api/users/' + requestParams.id)
+		return request(app).delete('/api/users/' + requestParams._id)
 			.set('Authorization', requestParams.token)
 			.then((response)=> {
 				expect(response.statusCode).toBe(200);
-				expect(response.body.user._id).toEqual(requestParams.id);
+				expect(response.body.user._id).toEqual(requestParams._id);
 			
 			});
 	});

@@ -75,7 +75,7 @@ export const getAllUsers = () => {
 				dispatch(setAllUsers(response.data.users));
 			}).catch((error)=> {
 				if (error.message) {
-					console.log(error.message);
+					dispatch(setError(error.response.statusText));
 				}
 				if(error.response && error.response.data.errors) {
 					const errors = error.response.data.errors.map(err => err.msg).join(', ');
@@ -97,7 +97,7 @@ export const updateUser = (user) => {
 				showToast(response.data.message.text);
 			}).catch((error)=> {
 				if (error.message) {
-					console.log(error.message);
+					dispatch(setError(error.response.statusText));
 				}
 				if(error.response && error.response.data.errors) {
 					const errors = error.response.data.errors.map(err => err.msg).join(', ');
@@ -119,7 +119,7 @@ export const deleteAccount = (user, ownProps) => {
 				ownProps.history.push('/');
 			}).catch((error)=> {
 				if (error.message) {
-					console.log(error.message);
+					dispatch(setError(error.response.statusText));
 				}
 				if(error.response && error.response.data.errors) {
 					const errors = error.response.data.errors.map(err => err.msg).join(', ');
@@ -142,7 +142,7 @@ export const changePassword = (user) => {
 					showToast(response.data.message.text);
 				}).catch((error)=> {
 					if (error.message) {
-						console.log(error.message);
+						dispatch(setError(error.response.statusText));
 					}
 					if(error.response && error.response.data.errors) {
 						const errors = error.response.data.errors.map(err => err.msg).join(', ');

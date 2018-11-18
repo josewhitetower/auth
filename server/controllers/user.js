@@ -7,9 +7,9 @@ const User = require('../models/user');
 const config = require('../config/db');
 
 function jwtSignUser(user) {
-	const ONE_WEEK = 60 * 60 * 24 * 7;
+	const EIGTH_HOURS = 60 * 60 * 8;
 	return jwt.sign(user, config.secret, {
-		expiresIn: ONE_WEEK,
+		expiresIn: EIGTH_HOURS,
 	});
 }
 
@@ -162,7 +162,7 @@ module.exports = {
 							console.log('BCRYPT HASH ERROR',err);
 						}
 						user.password = hash;
-
+						console.log('USER',user);
 						user.save((err) => {
 							if (err) {
 								res.status(500).json({
