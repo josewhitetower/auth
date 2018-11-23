@@ -12,11 +12,11 @@ const db = databaseConfig.mongoose.connection;
 
 //check for DB connection
 db.on('open', ()=>{
-	console.log('Connected to MongoDB');
+  console.log('Connected to MongoDB');
 });
 //check for DB errors
 db.on('error', (error)=>{
-	console.log('DATABASE ERROR', error.message);
+  console.log('DATABASE ERROR', error.message);
 });
 const app = express();
 
@@ -44,11 +44,12 @@ app.use('/api/users', require('./routes/user'));
 
 //404
 app.get('*', (req, res)=>{
-	res.redirect('index.html');
+
+  res.redirect('index.html');
 });
 
 app.listen(process.env.PORT || 5000, ()=>{
-	console.log('server running at port ' + databaseConfig.port);
+  console.log('server running at port ' + databaseConfig.port);
 });
 
 module.exports = app;

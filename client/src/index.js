@@ -14,11 +14,11 @@ import { createWhitelistFilter } from 'redux-persist-transform-filter';
 import rootReducer from './store/reducers/rootReducer';
 
 const persistConfig = {
-	key: 'root',
-	storage,
-	transforms: [
-		createWhitelistFilter('users', ['user']),        
-	]
+  key: 'root',
+  storage,
+  transforms: [
+    createWhitelistFilter('users', ['user']),        
+  ]
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -28,12 +28,12 @@ const store = createStore(persistedReducer, applyMiddleware(thunk));
 const persistor = persistStore(store);
 
 ReactDOM.render(
-	<Provider store ={store}>
-		<PersistGate loading= {null} persistor={persistor}>
-			<App />
-		</PersistGate>
-	</Provider>
-	, document.getElementById('root')
+  <Provider store ={store}>
+    <PersistGate loading= {null} persistor={persistor}>
+      <App />
+    </PersistGate>
+  </Provider>
+  , document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

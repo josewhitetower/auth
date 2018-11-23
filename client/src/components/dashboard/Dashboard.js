@@ -7,41 +7,40 @@ import UsersList from '../users/UsersList';
 import loginImage from './Login.png';
 
 const componentDidMount = (props) => {
-	//get the users
-	props.getAllUsers();
-	
+  //get the users
+  props.getAllUsers();
 };
 
 // make them properties on a standard object
 const methods = {
-	componentDidMount,
+  componentDidMount,
 };
 const Dashboard = (props) => {
-	const {user,users, error} = props;
-	const dashboard = user ? <UsersList users={users} />: 
-		<div className="center">
-			<h4>Welcome, please sing up!</h4>
-			<img src={loginImage} alt="A man in front a door" height={400}/>
-		</div>;
-	return (
-		<div>
-			{dashboard}
-			<p className='center red-text'>{error}</p>
-		</div>
-	);
+  const {user,users, error} = props;
+  const dashboard = user ? <UsersList users={users} />: 
+    <div className="center">
+      <h4>Welcome, please sing up!</h4>
+      <img src={loginImage} alt="A man in front a door" height={400}/>
+    </div>;
+  return (
+    <div>
+      {dashboard}
+      <p className='center red-text'>{error}</p>
+    </div>
+  );
 };
 const mapStateToProps = (state) =>({
-	users: state.users.users,
-	user: state.users.user,
-	error: state.users.error
+  users: state.users.users,
+  user: state.users.user,
+  error: state.users.error
 });
 
 const mapDispatchToProps = (dispatch) =>({
-	getAllUsers :() => dispatch(getAllUsers())
+  getAllUsers :() => dispatch(getAllUsers())
 });
 
 export default compose(
-	connect(mapStateToProps, mapDispatchToProps),
-	lifecycle(methods))(Dashboard);
+  connect(mapStateToProps, mapDispatchToProps),
+  lifecycle(methods))(Dashboard);
 
 
