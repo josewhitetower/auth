@@ -6,14 +6,46 @@ import {Redirect} from 'react-router-dom';
 class SignIn extends Component {
     state = {
       email: '',
-      password: '',        
+      password: '',
+      isEmailValid: false,
+      isPasswordValid: false,
+      emailErrors: '',
+      passwordErrors: '',
     }
 
     handleChange = (e) => {
       this.setState({
         [e.target.id]:e.target.value
       });
+      this.checkValid(e.target.id, e.target.value);
     }
+
+    checkValid(state, value) {
+      if (state === 'password') {
+        const isPasswordValid = value && value.length;
+        this.setState({ isPasswordValid });
+        if(!isPasswordValid) {
+          this.setState({passwordErrors: 'Password is a mandatory field'});
+        } else {
+          this.setState({passwordErrors: ''});
+        }
+      }
+      if (state === 'email') {
+        const isEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/;
+        const isEmailValid = value && isEmail.test(value);
+        this.setState({ isEmailValid });
+        if(!value) {
+          this.setState({emailErrors: 'Email is a mandatory field'});
+        } 
+        else if(!isEmailValid) {
+          this.setState({emailErrors: 'Email must be a valid E-Mail Address'});
+        } else {
+          this.setState({emailErrors: ''});
+        }
+      }
+      
+    }
+
     handleSubmit = (e) =>{
       e.preventDefault();
       this.props.signIn(this.state);
@@ -36,9 +68,9 @@ class SignIn extends Component {
               <input type="password" id="password" required onChange ={this.handleChange}/>
             </div>
             <div className="input-field">
-              <button className="btn purple lighten-2">Login</button>
+              <button className="btn purple lighten-2" disabled={!(this.state.isEmailValid && this.state.isPasswordValid)}>Login</button>
               <div className="center red-text">
-                {this.props.error}
+                {this.props.error || this.state.emailErrors || this.state.passwordErrors }
               </div>
             </div>
           </form>

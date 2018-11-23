@@ -62,11 +62,11 @@ export const signIn = (credentials, ownProps) => {
         ownProps.history.push('/');
         showToast(response.data.message.text);
       }).catch((error)=> {
-        if (error.message) {
-          dispatch(setError(error.message));
-        } else if(error.response.data.errors) {
+        if(error.response && error.response.data.errors) {
           const errors = error.response.data.errors.map(err => err.msg).join(', ');
           dispatch(setError(errors));
+        } else {
+          dispatch(setError(error.message));
         }
       });
   };
@@ -78,11 +78,11 @@ export const getAllUsers = () => {
       .then((response) => {
         dispatch(setAllUsers(response.data.users));
       }).catch((error)=> {
-        if (error.message) {
-          dispatch(setError(error.message));
-        } else if(error.response && error.response.data.errors) {
+        if(error.response && error.response.data.errors) {
           const errors = error.response.data.errors.map(err => err.msg).join(', ');
           dispatch(setError(errors));
+        } else {
+          dispatch(setError(error.message));
         }
       });
   };
@@ -99,16 +99,16 @@ export const updateUser = (user, ownProps) => {
         dispatch(setUser(response.data.user));
         showToast(response.data.message.text);
       }).catch((error)=> {
-        if (error.message) {
+        if (error.response) {
           if (error.response.status === 401 || error.response.status === 403) {
             dispatch(logOut());
             ownProps.history.push('/signin');
           } else {
-            dispatch(setError(error.response.statusText));
+            const errors = error.response.data.errors.map(err => err.msg).join(', ');
+            dispatch(setError(errors));
           }
-        } else if(error.response && error.response.data.errors) {
-          const errors = error.response.data.errors.map(err => err.msg).join(', ');
-          dispatch(setError(errors));
+        } else  {
+          dispatch(setError(error.message));
         }
       });
   };
@@ -126,16 +126,16 @@ export const deleteAccount = (user, ownProps) => {
         showToast(response.data.message.text);
         ownProps.history.push('/');
       }).catch((error)=> {
-        if (error.message) {
+        if (error.response) {
           if (error.response.status === 401 || error.response.status === 403) {
             dispatch(logOut());
             ownProps.history.push('/signin');
           } else {
-            dispatch(setError(error.response.statusText));
+            const errors = error.response.data.errors.map(err => err.msg).join(', ');
+            dispatch(setError(errors));
           }
-        } else if(error.response && error.response.data.errors) {
-          const errors = error.response.data.errors.map(err => err.msg).join(', ');
-          dispatch(setError(errors));
+        } else  {
+          dispatch(setError(error.message));
         }
       });
   };
@@ -153,16 +153,16 @@ export const changePassword = (user, ownProps) => {
           dispatch(setUser(response.data.user));
           showToast(response.data.message.text);
         }).catch((error)=> {
-          if (error.message) {
+          if (error.response) {
             if (error.response.status === 401 || error.response.status === 403) {
               dispatch(logOut());
               ownProps.history.push('/signin');
             } else {
-              dispatch(setError(error.response.statusText));
+              const errors = error.response.data.errors.map(err => err.msg).join(', ');
+              dispatch(setError(errors));
             }
-          } else if(error.response && error.response.data.errors) {
-            const errors = error.response.data.errors.map(err => err.msg).join(', ');
-            dispatch(setError(errors));
+          } else  {
+            dispatch(setError(error.message));
           }
         });
     };
