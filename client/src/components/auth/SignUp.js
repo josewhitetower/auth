@@ -9,14 +9,82 @@ class SignUp extends Component {
       password: '',
       confirmPassword:'',
       firstName: ''  ,
-      lastName: ''     
+      lastName: '',
+      emailErrors: '',
+      passwordErrors: '',
+      firstNameErrors: '',
+      lastNameErrors: '',
+      confirmPasswordErrors: '',     
     }
 
     handleChange = (e) => {
       this.setState({
         [e.target.id]:e.target.value
       });
+      this.checkValid(e.target.id, e.target.value);
     }
+
+    isDisabled = () => {
+      return this.state.emailErrors || this.state.passwordErrors ||
+      this.state.confirmPasswordErrors || this.state.firstNameErrors ||
+      this.state.lastNameErrors;
+    }
+
+    checkValid = (state, value) => {
+      if (state === 'password') {
+        if(!value) {
+          this.setState({passwordErrors: 'Password is a mandatory field'});
+        } else if (value.length < 6) {
+          this.setState({passwordErrors: 'Password must have at least 6 characters'});
+        } else {
+          this.setState({passwordErrors: ''});
+        }
+      }
+
+      if (state === 'firstName') {
+        const isFirstNameValid = value && value.length;
+        if(!isFirstNameValid) {
+          this.setState({firstNameErrors: 'First name is a mandatory field'});
+        } else {
+          this.setState({firstNameErrors: ''});
+        }
+      }
+
+      if (state === 'lastName') {
+        const isLastNameValid = value && value.length;
+        if(!isLastNameValid) {
+          this.setState({lastNameErrors: 'Last name is a mandatory field'});
+        } else {
+          this.setState({lastNameErrors: ''});
+        }
+      }
+
+      if (state === 'confirmPassword') {
+        const isEqual = value === this.state.password;
+        if (!value) {
+          this.setState({confirmPasswordErrors: 'Confirm password name is a mandatory field'});
+        } else if (!isEqual) {
+          this.setState({confirmPasswordErrors: 'Passwords don\'t match'});
+        } else {
+          this.setState({confirmPasswordErrors: ''});
+        }
+      }
+
+      if (state === 'email') {
+        const isEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/;
+        const isEmailValid = value && isEmail.test(value);
+        if(!value) {
+          this.setState({emailErrors: 'Email is a mandatory field'});
+        } 
+        else if(!isEmailValid) {
+          this.setState({emailErrors: 'Email must be a valid E-Mail Address'});
+        } else {
+          this.setState({emailErrors: ''});
+        }
+      }
+      
+    }
+
     handleSubmit = (e) =>{
       e.preventDefault();
       this.props.signUp(this.state);
@@ -51,9 +119,16 @@ class SignUp extends Component {
               <input type="text" id="lastName" required onChange ={this.handleChange}/>
             </div>
             <div className="input-field">
-              <button className="btn purple lighten-2">Sign Up</button>
+              <button 
+                className="btn purple lighten-2"
+                disabled={this.isDisabled()}>
+                Sign Up
+              </button>
               <div className="center red-text">
-                {this.props.error} 
+                {this.props.error || this.state.emailErrors || this.state.passwordErrors ||
+                  this.state.firstNameErrors || this.state.lastNameErrors || 
+                  this.state.confirmPasswordErrors
+                }
               </div>
             </div>
           </form>

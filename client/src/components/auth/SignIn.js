@@ -7,8 +7,6 @@ class SignIn extends Component {
     state = {
       email: '',
       password: '',
-      isEmailValid: false,
-      isPasswordValid: false,
       emailErrors: '',
       passwordErrors: '',
     }
@@ -20,10 +18,13 @@ class SignIn extends Component {
       this.checkValid(e.target.id, e.target.value);
     }
 
-    checkValid(state, value) {
+    isDisabled = () => {
+      return this.state.emailErrors || this.state.passwordErrors;
+    }
+
+    checkValid = (state, value) => {
       if (state === 'password') {
         const isPasswordValid = value && value.length;
-        this.setState({ isPasswordValid });
         if(!isPasswordValid) {
           this.setState({passwordErrors: 'Password is a mandatory field'});
         } else {
@@ -33,7 +34,6 @@ class SignIn extends Component {
       if (state === 'email') {
         const isEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/;
         const isEmailValid = value && isEmail.test(value);
-        this.setState({ isEmailValid });
         if(!value) {
           this.setState({emailErrors: 'Email is a mandatory field'});
         } 
@@ -68,9 +68,9 @@ class SignIn extends Component {
               <input type="password" id="password" required onChange ={this.handleChange}/>
             </div>
             <div className="input-field">
-              <button className="btn purple lighten-2" disabled={!(this.state.isEmailValid && this.state.isPasswordValid)}>Login</button>
+              <button className="btn purple lighten-2" disabled={this.isDisabled()}>Login</button>
               <div className="center red-text">
-                {this.props.error || this.state.emailErrors || this.state.passwordErrors }
+                {this.props.error || this.state.passwordErrors || this.state.emailErrors}
               </div>
             </div>
           </form>
