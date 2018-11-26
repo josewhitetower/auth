@@ -1,7 +1,5 @@
-
 module.exports = {
-  register: (check) => {
-
+  register: check => {
     return [
       check('email')
         .isEmail()
@@ -11,19 +9,32 @@ module.exports = {
         .withMessage('Email is required')
         .trim()
         .normalizeEmail(),
-      check('firstName', 'First name is required').not().isEmpty().trim(),
-      check('lastName', 'Last is required').not().isEmpty().trim(),
-      check('password', 'Password is required').not().isEmpty().isLength({ min: 6 })
-        .custom((value, { req }) => (value !== req.body.confirmPassword ? false : value))
-        .withMessage('Passwords don\'t match')
+      check('firstName', 'First name is required')
+        .not()
+        .isEmpty()
         .trim(),
+      check('lastName', 'Last is required')
+        .not()
+        .isEmpty()
+        .trim(),
+      check('password', 'Password is required')
+        .not()
+        .isEmpty()
+        .isLength({ min: 6 })
+        .custom((value, { req }) =>
+          value !== req.body.confirmPassword ? false : value
+        )
+        .withMessage('Passwords don\'t match')
+        .trim()
     ];
   },
 
-  login: (check) => {
+  login: check => {
     return [
-      check('password', 'Password is required').not().isEmpty()
-        .trim(),        
+      check('password', 'Password is required')
+        .not()
+        .isEmpty()
+        .trim(),
       check('email')
         .isEmail()
         .withMessage('Email is not valid')
@@ -31,8 +42,7 @@ module.exports = {
         .isEmpty()
         .withMessage('Email is required')
         .trim()
-        .normalizeEmail(),
+        .normalizeEmail()
     ];
   }
-	
 };

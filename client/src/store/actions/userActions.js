@@ -1,21 +1,22 @@
 import * as types from '../constants/ActionTypes';
 import axios from 'axios';
 
-const url =  process.env.NODE_ENV === 'development' ?'http://localhost:8081': '';
+const url =
+  process.env.NODE_ENV === 'development' ? 'http://localhost:8081' : '';
 
-const showToast = (text) => {
-  window.M.toast({html: text, classes:'green lighten-1'});
+const showToast = text => {
+  window.M.toast({ html: text, classes: 'green lighten-1' });
 };
-export const setUser = (user)=> {
+export const setUser = user => {
   return {
-    type:types.SET_USER,
-    user,
+    type: types.SET_USER,
+    user
   };
 };
-export const setError = (error)=> {
+export const setError = error => {
   return {
-    type:types.SET_ERROR,
-    error,
+    type: types.SET_ERROR,
+    error
   };
 };
 
@@ -23,11 +24,11 @@ export const logOut = () => {
   localStorage.removeItem('token');
   return {
     type: types.SET_USER,
-    user: null,
+    user: null
   };
 };
 
-export const setAllUsers = (users) => {
+export const setAllUsers = users => {
   return {
     type: types.GET_ALL_USERS,
     users
@@ -35,18 +36,22 @@ export const setAllUsers = (users) => {
 };
 
 export const signUp = (user, ownProps) => {
-  return (dispatch) => {
-    axios.post(`${url}/api/users/register`, user)
-      .then((response) => {
+  return dispatch => {
+    axios
+      .post(`${url}/api/users/register`, user)
+      .then(response => {
         dispatch(setUser(response.data.user));
         localStorage.setItem('token', response.data.token);
         ownProps.history.push('/');
         showToast(response.data.message.text);
-      }).catch((error)=> {
+      })
+      .catch(error => {
         if (error.message) {
           dispatch(setError(error.message));
-        } else if(error.response.data.errors) {
-          const errors = error.response.data.errors.map(err => err.msg).join(', ');
+        } else if (error.response.data.errors) {
+          const errors = error.response.data.errors
+            .map(err => err.msg)
+            .join(', ');
           dispatch(setError(errors));
         }
       });
@@ -54,16 +59,20 @@ export const signUp = (user, ownProps) => {
 };
 
 export const signIn = (credentials, ownProps) => {
-  return (dispatch) => {
-    axios.post(`${url}/api/users/login`, credentials)
-      .then((response) => {
+  return dispatch => {
+    axios
+      .post(`${url}/api/users/login`, credentials)
+      .then(response => {
         dispatch(setUser(response.data.user));
         localStorage.setItem('token', response.data.token);
         ownProps.history.push('/');
         showToast(response.data.message.text);
-      }).catch((error)=> {
-        if(error.response && error.response.data.errors) {
-          const errors = error.response.data.errors.map(err => err.msg).join(', ');
+      })
+      .catch(error => {
+        if (error.response && error.response.data.errors) {
+          const errors = error.response.data.errors
+            .map(err => err.msg)
+            .join(', ');
           dispatch(setError(errors));
         } else {
           dispatch(setError(error.message));
@@ -73,13 +82,17 @@ export const signIn = (credentials, ownProps) => {
 };
 
 export const getAllUsers = () => {
-  return(dispatch) => {
-    axios.get(`${url}/api/users/`)
-      .then((response) => {
+  return dispatch => {
+    axios
+      .get(`${url}/api/users/`)
+      .then(response => {
         dispatch(setAllUsers(response.data.users));
-      }).catch((error)=> {
-        if(error.response && error.response.data.errors) {
-          const errors = error.response.data.errors.map(err => err.msg).join(', ');
+      })
+      .catch(error => {
+        if (error.response && error.response.data.errors) {
+          const errors = error.response.data.errors
+            .map(err => err.msg)
+            .join(', ');
           dispatch(setError(errors));
         } else {
           dispatch(setError(error.message));
@@ -89,52 +102,60 @@ export const getAllUsers = () => {
 };
 
 export const updateUser = (user, ownProps) => {
-  return(dispatch) => {
-    axios.put(`${url}/api/users/` + user._id, user, {
-      headers: {
-        Authorization: localStorage.getItem('token')
-      }
-    })
-      .then((response) => {
+  return dispatch => {
+    axios
+      .put(`${url}/api/users/` + user._id, user, {
+        headers: {
+          Authorization: localStorage.getItem('token')
+        }
+      })
+      .then(response => {
         dispatch(setUser(response.data.user));
         showToast(response.data.message.text);
-      }).catch((error)=> {
+      })
+      .catch(error => {
         if (error.response) {
           if (error.response.status === 401 || error.response.status === 403) {
             dispatch(logOut());
             ownProps.history.push('/signin');
           } else {
-            const errors = error.response.data.errors.map(err => err.msg).join(', ');
+            const errors = error.response.data.errors
+              .map(err => err.msg)
+              .join(', ');
             dispatch(setError(errors));
           }
-        } else  {
+        } else {
           dispatch(setError(error.message));
         }
       });
   };
 };
 export const deleteAccount = (user, ownProps) => {
-  return(dispatch) => {
-    axios.delete(`${url}/api/users/` + user._id,{
-      headers: {
-        Authorization: localStorage.getItem('token')
-      }
-    })
+  return dispatch => {
+    axios
+      .delete(`${url}/api/users/` + user._id, {
+        headers: {
+          Authorization: localStorage.getItem('token')
+        }
+      })
 
-      .then((response) => {
+      .then(response => {
         dispatch(logOut());
         showToast(response.data.message.text);
         ownProps.history.push('/');
-      }).catch((error)=> {
+      })
+      .catch(error => {
         if (error.response) {
           if (error.response.status === 401 || error.response.status === 403) {
             dispatch(logOut());
             ownProps.history.push('/signin');
           } else {
-            const errors = error.response.data.errors.map(err => err.msg).join(', ');
+            const errors = error.response.data.errors
+              .map(err => err.msg)
+              .join(', ');
             dispatch(setError(errors));
           }
-        } else  {
+        } else {
           dispatch(setError(error.message));
         }
       });
@@ -143,25 +164,32 @@ export const deleteAccount = (user, ownProps) => {
 
 export const changePassword = (user, ownProps) => {
   if (user.currentPassword && user.newPassword) {
-    return(dispatch) => {
-      axios.put(`${url}/api/users/changepassword`, user, {
-        headers: {
-          Authorization: localStorage.getItem('token')
-        }
-      })
-        .then((response) => {
+    return dispatch => {
+      axios
+        .put(`${url}/api/users/changepassword`, user, {
+          headers: {
+            Authorization: localStorage.getItem('token')
+          }
+        })
+        .then(response => {
           dispatch(setUser(response.data.user));
           showToast(response.data.message.text);
-        }).catch((error)=> {
+        })
+        .catch(error => {
           if (error.response) {
-            if (error.response.status === 401 || error.response.status === 403) {
+            if (
+              error.response.status === 401 ||
+              error.response.status === 403
+            ) {
               dispatch(logOut());
               ownProps.history.push('/signin');
             } else {
-              const errors = error.response.data.errors.map(err => err.msg).join(', ');
+              const errors = error.response.data.errors
+                .map(err => err.msg)
+                .join(', ');
               dispatch(setError(errors));
             }
-          } else  {
+          } else {
             dispatch(setError(error.message));
           }
         });

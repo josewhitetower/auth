@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Switch, Route} from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Dashboard from './components/dashboard/Dashboard';
 import UserProfile from './components/users/UserProfile';
 import SignIn from './components/auth/SignIn';
@@ -12,17 +12,27 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <Navbar/>
+          <Navbar />
           <Switch>
-            <Route exact path='/' component={Dashboard}/>
-            <Route path='/signin' component={SignIn}/>
-            <Route path='/signup' component={SignUp}/>
-            <Route path='/profile' component={UserProfile}/>
-            <Route path='*' component={Page404}/>
+            <Route exact path="/" component={Dashboard} />
+            <Route path="/signin" component={SignIn} />
+            <Route path="/signup" component={SignUp} />
+            <Route path="/profile" component={UserProfile} />
+            <Route path="*" component={Page404} />
           </Switch>
           <div className="center">
-            <p> Created with <span role="img" aria-label="heart">💓 </span> 
-                by <a href="https://www.github.com/josewhitetower" target="_blank" rel="noopener noreferrer">
+            <p>
+              {' '}
+              Created with{' '}
+              <span role="img" aria-label="heart">
+                💓{' '}
+              </span>
+              by{' '}
+              <a
+                href="https://www.github.com/josewhitetower"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 @josewhitetower
               </a>
             </p>

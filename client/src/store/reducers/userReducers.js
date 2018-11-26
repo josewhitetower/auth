@@ -1,9 +1,9 @@
-import {SET_USER, SET_ERROR, GET_ALL_USERS} from '../constants/ActionTypes';
+import { SET_USER, SET_ERROR, GET_ALL_USERS } from '../constants/ActionTypes';
 
 const initState = {
   user: null,
   error: null,
-  users: null,
+  users: null
 };
 
 const userReducer = (state = initState, action) => {
@@ -11,7 +11,7 @@ const userReducer = (state = initState, action) => {
   case SET_USER:
     return {
       ...state,
-      user:action.user,
+      user: action.user,
       error: null
     };
   case SET_ERROR:

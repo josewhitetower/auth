@@ -5,10 +5,13 @@ module.exports = {
   secret: process.env.SECRET,
   port: process.env.PORT,
   mongoose,
-  connect:() => {
-    mongoose.connect(process.env.DB_URL,{ useNewUrlParser: true, useCreateIndex: true, });
+  connect: () => {
+    mongoose.connect(
+      process.env.DB_URL,
+      { useNewUrlParser: true, useCreateIndex: true }
+    );
   },
-  disconnect: (done)=> {
+  disconnect: done => {
     mongoose.disconnect(done);
   }
 };

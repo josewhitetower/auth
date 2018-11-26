@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {createStore, applyMiddleware} from 'redux';
-import {Provider} from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
-import storage from 'redux-persist/lib/storage'; 
+import storage from 'redux-persist/lib/storage';
 import { createWhitelistFilter } from 'redux-persist-transform-filter';
 
 import rootReducer from './store/reducers/rootReducer';
@@ -16,24 +16,21 @@ import rootReducer from './store/reducers/rootReducer';
 const persistConfig = {
   key: 'root',
   storage,
-  transforms: [
-    createWhitelistFilter('users', ['user']),        
-  ]
+  transforms: [createWhitelistFilter('users', ['user'])]
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 
 const store = createStore(persistedReducer, applyMiddleware(thunk));
 const persistor = persistStore(store);
 
 ReactDOM.render(
-  <Provider store ={store}>
-    <PersistGate loading= {null} persistor={persistor}>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
       <App />
     </PersistGate>
-  </Provider>
-  , document.getElementById('root')
+  </Provider>,
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
