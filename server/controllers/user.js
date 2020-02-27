@@ -18,7 +18,7 @@ module.exports = {
       if (users.length) {
         res.status(200).json({
           users,
-          isAuthenticated: req.isAuthenticated(),
+          isAuthenticated: true,
         });
       } else {
         res.status(200).json({
@@ -154,7 +154,7 @@ module.exports = {
           user,
           message: {
             type: 'success',
-            text: `User "${user.firstName}" deleted succesfully`,
+            text: `User "${user.firstName}" deleted successfully`,
           },
         })
       )
@@ -183,7 +183,7 @@ module.exports = {
                 user,
                 message: {
                   type: 'success',
-                  text: 'Password changed succesfully',
+                  text: 'Password changed successfully',
                 },
               });
             }

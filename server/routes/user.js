@@ -7,6 +7,7 @@ const upload = require('../config/multer');
 const UserController = require('../controllers/user');
 const validations = require('../validations');
 const confirmPassword = require('../middleware/confirmPassword');
+const verifyJWTToken = require('../middleware/verifyJWTToken');
 
 router.get('/', UserController.all);
 
@@ -22,26 +23,26 @@ router.post(
 
 router.get(
   '/profile',
-  // passport.authenticate('jwt', { session: false }),
+  verifyJWTToken,
   UserController.profile
 );
 
 router.put(
   '/changepassword',
-  // passport.authenticate('jwt', { session: false }),
+  verifyJWTToken,
   confirmPassword,
   UserController.changePassword
 );
 
 router.put(
   '/:id',
-  // passport.authenticate('jwt', { session: false }),
+  verifyJWTToken,
   UserController.edit
 );
 
 router.delete(
   '/:id',
-  // passport.authenticate('jwt', { session: false }),
+  verifyJWTToken,
   UserController.delete
 );
 
