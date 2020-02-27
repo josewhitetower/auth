@@ -13,7 +13,7 @@ function verifyJWTToken(token) {
 }
 
 module.exports = (req, res, next) => {
-  let token = req.method === 'POST' ? req.body.token : req.query.token;
+  let token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : '';
 
   verifyJWTToken(token)
     .then(decodedToken => {
