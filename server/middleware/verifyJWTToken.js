@@ -23,14 +23,14 @@ module.exports = (req, res, next) => {
         next();
       })
       .catch(() => {
-        res.status(400).json({
+        res.status(401).json({
           errors: [
             {msg: 'Unsuccessful login, please check your credentials user'},
           ],
         });
       });
   } else {
-    res.status(400).json({
+    res.status(401).json({
       errors: [{msg: 'Unsuccessful login, please check your credentials user'}],
     });
   }

@@ -2,14 +2,9 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 
 module.exports = (req, res, next) => {
-  const { user, body } = req;
-  /*
-        I think here we can access to the req.body.user
-        or directly to req.user provider by passport.js 
-        from the previous middleware
-   */
+  const { body, body: { email } } = req;
 
-  User.findOne({ email: user.email })
+  User.findOne({ email })
     .exec()
     .then(user => {
       bcrypt.compare(body.currentPassword, user.password, (err, isMatch) => {

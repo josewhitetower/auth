@@ -21,12 +21,6 @@ router.post(
   UserController.register
 );
 
-router.get(
-  '/profile',
-  verifyJWTToken,
-  UserController.profile
-);
-
 router.put(
   '/changepassword',
   verifyJWTToken,

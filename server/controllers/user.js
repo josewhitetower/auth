@@ -131,12 +131,6 @@ module.exports = {
     });
   },
 
-  profile(req, res) {
-    res
-      .status(200)
-      .json({user: req.user, isAuthenticated: req.isAuthenticated()});
-  },
-
   edit(req, res) {
     User.findByIdAndUpdate(req.params.id, req.body, {new: true})
       .then(user =>
@@ -144,7 +138,7 @@ module.exports = {
           user,
           message: {
             type: 'success',
-            text: 'User succesfully updated',
+            text: 'User successfully updated',
           },
         })
       )
@@ -174,7 +168,6 @@ module.exports = {
             console.log('BCRYPT HASH ERROR', err);
           }
           user.password = hash;
-          console.log('USER', user);
           user.save(err => {
             if (err) {
               res.status(500).json({
