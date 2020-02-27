@@ -40,8 +40,8 @@ export const signUp = (user, ownProps) => {
     axios
       .post(`${url}/api/users/register`, user)
       .then(response => {
-        dispatch(setUser(response.data.user));
         localStorage.setItem('token', response.data.token);
+        dispatch(setUser(response.data.user));
         ownProps.history.push('/');
         showToast(response.data.message.text);
       })
@@ -63,8 +63,8 @@ export const signIn = (credentials, ownProps) => {
     axios
       .post(`${url}/api/users/login`, credentials)
       .then(response => {
-        dispatch(setUser(response.data.user));
         localStorage.setItem('token', response.data.token);
+        dispatch(setUser(response.data.user));
         ownProps.history.push('/');
         showToast(response.data.message.text);
       })
@@ -120,7 +120,7 @@ export const updateUser = (user, ownProps) => {
       .catch(error => {
         if (error.response) {
           if (error.response.status === 401 || error.response.status === 403) {
-            dispatch(setError("Unauthorized, try again please"));
+            dispatch(setError('Unauthorized, try again please'));
           } else {
             const errors = error.response.data.errors
               .map(err => err.msg)
