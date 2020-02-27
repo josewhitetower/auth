@@ -108,22 +108,26 @@ module.exports = {
         });
       }
 
-      if (bcrypt.compare(password, user.password)) {
-        const token = `JWT ${jwtSignUser({id: user._id})}`;
-        return res.status(200).json({
-          user,
-          token,
-          isAuthenticated: true,
-          message: {
-            type: 'success',
-            text: `Hi ${user.firstName}, you are successfully logged in`,
-          },
-        });
-      } else {
-        res.status(400).json({
-          errors: [{msg: 'Unsuccessful login, please check your credentials cred'}],
-        });
-      }
+      bcrypt.compare(password, user.password).then(result => {
+        if (result) {
+          const token = `JWT ${jwtSignUser({id: user._id})}`;
+          return res.status(200).json({
+            user,
+            token,
+            isAuthenticated: true,
+            message: {
+              type: 'success',
+              text: `Hi ${user.firstName}, you are successfully logged in`,
+            },
+          });
+        } else {
+          res.status(400).json({
+            errors: [
+              {msg: 'Unsuccessful login, please check your credentials cred'},
+            ],
+          });
+        }
+      });
     });
   },
 
