@@ -54,7 +54,7 @@ describe("USER REST API", () => {
       });
   });
 
-  test("5. It should  allow to change password ", () => {
+  test("5. It should allow to change password ", () => {
     const currentPassword = requestParams.password;
     const newPassword = "user2";
     const user = {
@@ -73,7 +73,7 @@ describe("USER REST API", () => {
       });
   });
 
-  test("6. It should  allow to edit an user ", () => {
+  test("6. It should allow to edit an user ", () => {
     const newEmail = "user12@email.com";
     return request(app)
       .put("/api/users/" + requestParams._id)
@@ -86,13 +86,30 @@ describe("USER REST API", () => {
       });
   });
 
-  test("7. It should  allow to delete an user ", () => {
+  test("7. It should allow to delete an user ", () => {
     return request(app)
       .delete("/api/users/" + requestParams._id)
       .set("Authorization", requestParams.token)
       .then(response => {
         expect(response.statusCode).toBe(200);
         expect(response.body.user._id).toEqual(requestParams._id);
+      });
+  });
+  test("8. It should not allow to list users if not authenticated ", () => {
+    return request(app)
+      .get("/api/users/")
+      .set("Authorization", "whatever")
+      .then(response => {
+        expect(response.statusCode).toBe(401);
+      });
+  });
+  test("9. It should allow to list users if authenticated ", () => {
+    return request(app)
+      .get('/api/users/')
+      .set('Authorization', requestParams.token)
+      .then(response => {
+        expect(response.statusCode).toBe(200);
+        expect(Array.isArray(response.body.users)).toBe(true);
       });
   });
 });
