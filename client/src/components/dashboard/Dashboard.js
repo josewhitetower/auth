@@ -6,14 +6,16 @@ import { getAllUsers } from '../../store/actions/userActions';
 import UsersList from '../users/UsersList';
 import loginImage from './Login.png';
 
-const componentDidMount = props => {
+const componentDidUpdate = props => {
   //get the users
-  props.getAllUsers();
+  if (props.user) {
+    props.getAllUsers();
+  }
 };
 
 // make them properties on a standard object
 const methods = {
-  componentDidMount
+  componentDidUpdate,
 };
 const Dashboard = props => {
   const { user, users, error } = props;
