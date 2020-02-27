@@ -116,8 +116,7 @@ export const updateUser = (user, ownProps) => {
       .catch(error => {
         if (error.response) {
           if (error.response.status === 401 || error.response.status === 403) {
-            dispatch(logOut());
-            ownProps.history.push('/signin');
+            dispatch(setError("Unauthorized, try again please"));
           } else {
             const errors = error.response.data.errors
               .map(err => err.msg)
@@ -147,8 +146,7 @@ export const deleteAccount = (user, ownProps) => {
       .catch(error => {
         if (error.response) {
           if (error.response.status === 401 || error.response.status === 403) {
-            dispatch(logOut());
-            ownProps.history.push('/signin');
+            dispatch(setError('Unauthorized, try again please'));
           } else {
             const errors = error.response.data.errors
               .map(err => err.msg)
@@ -181,8 +179,7 @@ export const changePassword = (user, ownProps) => {
               error.response.status === 401 ||
               error.response.status === 403
             ) {
-              dispatch(logOut());
-              ownProps.history.push('/signin');
+              dispatch(setError('Unauthorized, try again please'));
             } else {
               const errors = error.response.data.errors
                 .map(err => err.msg)
