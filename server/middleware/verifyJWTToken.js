@@ -13,18 +13,25 @@ function verifyJWTToken(token) {
 }
 
 module.exports = (req, res, next) => {
-  let token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : '';
-
-  verifyJWTToken(token)
-    .then(decodedToken => {
-      req.user = decodedToken.data;
-      next();
-    })
-    .catch(() => {
-      res.status(400).json({
-        errors: [
-          {msg: 'Unsuccessful login, please check your credentials user'},
-        ],
+  let token = req.headers.authorization
+    ? req.headers.authorization.split(' ')[1]
+    : '';
+  if (token) {
+    verifyJWTToken(token)
+      .then(decodedToken => {
+        req.user = decodedToken.data;
+        next();
+      })
+      .catch(() => {
+        res.status(400).json({
+          errors: [
+            {msg: 'Unsuccessful login, please check your credentials user'},
+          ],
+        });
       });
+  } else {
+    res.status(400).json({
+      errors: [{msg: 'Unsuccessful login, please check your credentials user'}],
     });
+  }
 };
