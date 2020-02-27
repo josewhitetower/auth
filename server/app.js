@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const passport = require('passport');
+
 const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
@@ -29,13 +29,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
-
-// Passport config
-require('./config/passport')(passport);
-
-//Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
 
 //user route
 app.use('/api/users', require('./routes/user'));

@@ -1,15 +1,14 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator/check');
-const passport = require('passport');
+const {validationResult} = require('express-validator/check');
 
 const User = require('../models/user');
 const config = require('../config/db');
 
 function jwtSignUser(user) {
-  const EIGTH_HOURS = 60 * 60 * 8;
+  const EIGHT_HOURS = 60 * 60 * 8;
   return jwt.sign(user, config.secret, {
-    expiresIn: EIGTH_HOURS
+    expiresIn: EIGHT_HOURS,
   });
 }
 
@@ -19,15 +18,15 @@ module.exports = {
       if (users.length) {
         res.status(200).json({
           users,
-          isAuthenticated: req.isAuthenticated()
+          isAuthenticated: req.isAuthenticated(),
         });
       } else {
         res.status(200).json({
           users: [],
           message: {
             type: 'info',
-            text: 'No Users found'
-          }
+            text: 'No Users found',
+          },
         });
       }
     });
@@ -37,22 +36,22 @@ module.exports = {
     // Finds the validation errors in this request and wraps them in an object with handy functions
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
+      return res.status(422).json({errors: errors.array()});
     }
 
-    const { email, password, firstName, lastName } = req.body;
-    User.findOne({ email })
+    const {email, password, firstName, lastName} = req.body;
+    User.findOne({email})
       .then(user => {
         if (user) {
           return res.status(403).json({
-            errors: [{ msg: 'Email already in use' }]
+            errors: [{msg: 'Email already in use'}],
           });
         }
         const newUser = new User({
           email,
           password,
           firstName,
-          lastName
+          lastName,
         });
         if (req.file) {
           newUser.userImage = req.file.path;
@@ -67,24 +66,22 @@ module.exports = {
             newUser.save(err => {
               if (err) {
                 res.status(500).json({
-                  errors: [{ msg: 'Problem saving user' }],
-                  err
+                  errors: [{msg: 'Problem saving user'}],
+                  err,
                 });
                 throw err;
               } else {
-                req.login(newUser, err => {
-                  // login after register
-                  if (err) throw err;
-                  const token = `JWT ${jwtSignUser({ id: newUser._id })}`;
-                  res.status(201).json({
-                    user: newUser,
-                    token,
-                    isAuthenticated: req.isAuthenticated(),
-                    message: {
-                      type: 'success',
-                      text: `User "${req.user.firstName}" created succesfully`
-                    }
-                  });
+                // login after register
+                if (err) throw err;
+                const token = `JWT ${jwtSignUser({id: newUser._id})}`;
+                res.status(201).json({
+                  user: newUser,
+                  token,
+                  isAuthenticated: true,
+                  message: {
+                    type: 'success',
+                    text: `User "${newUser.firstName}" created successfully`,
+                  },
                 });
               }
             });
@@ -100,55 +97,54 @@ module.exports = {
     // Finds the validation errors in this request and wraps them in an object with handy functions
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
+      return res.status(422).json({errors: errors.array()});
     }
-    passport.authenticate('local', { session: false }, (err, user) => {
-      if (err || !user) {
-        return res.status(400).json({
-          errors: [{ msg: 'Unsuccesful login, please check your credentials' }]
+
+    const {email, password} = req.body;
+    User.findOne({email}).then(user => {
+      if (!user) {
+        res.status(400).json({
+          errors: [{msg: 'Unsuccessful login, please check your credentials user'}],
         });
       }
-      req.login(user, { session: false }, err => {
-        if (err) {
-          res.status(400).json({
-            errors: [
-              { msg: 'Unsuccesful login, please check your credentials' }
-            ]
-          });
-        }
-        // generate a signed son web token with the contents of user object and return it in the response
-        const token = `JWT ${jwtSignUser({ id: user._id })}`;
+
+      if (bcrypt.compare(password, user.password)) {
+        const token = `JWT ${jwtSignUser({id: user._id})}`;
         return res.status(200).json({
           user,
           token,
-          isAuthenticated: req.isAuthenticated(),
+          isAuthenticated: true,
           message: {
             type: 'success',
-            text: `Hi ${user.firstName}, you are succesfully logged in`
-          }
+            text: `Hi ${user.firstName}, you are successfully logged in`,
+          },
         });
-      });
-    })(req, res);
+      } else {
+        res.status(400).json({
+          errors: [{msg: 'Unsuccessful login, please check your credentials cred'}],
+        });
+      }
+    });
   },
 
   profile(req, res) {
     res
       .status(200)
-      .json({ user: req.user, isAuthenticated: req.isAuthenticated() });
+      .json({user: req.user, isAuthenticated: req.isAuthenticated()});
   },
 
   edit(req, res) {
-    User.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    User.findByIdAndUpdate(req.params.id, req.body, {new: true})
       .then(user =>
         res.status(200).json({
           user,
           message: {
             type: 'success',
-            text: 'User succesfully updated'
-          }
+            text: 'User succesfully updated',
+          },
         })
       )
-      .catch(err => res.send({ err: err }));
+      .catch(err => res.send({err: err}));
   },
 
   delete(req, res) {
@@ -158,15 +154,15 @@ module.exports = {
           user,
           message: {
             type: 'success',
-            text: `User "${user.firstName}" deleted succesfully`
-          }
+            text: `User "${user.firstName}" deleted succesfully`,
+          },
         })
       )
-      .catch(err => res.send({ err: err }));
+      .catch(err => res.send({err: err}));
   },
 
   changePassword(req, res) {
-    const { newPassword } = req.body;
+    const {newPassword} = req.body;
     User.findById(req.body._id).then(user => {
       bcrypt.genSalt(10, (_, salt) => {
         bcrypt.hash(newPassword, salt, (err, hash) => {
@@ -178,8 +174,8 @@ module.exports = {
           user.save(err => {
             if (err) {
               res.status(500).json({
-                errors: [{ msg: 'Problem saving user' }],
-                err
+                errors: [{msg: 'Problem saving user'}],
+                err,
               });
               throw err;
             } else {
@@ -187,13 +183,13 @@ module.exports = {
                 user,
                 message: {
                   type: 'success',
-                  text: 'Password changed succesfully'
-                }
+                  text: 'Password changed succesfully',
+                },
               });
             }
           });
         });
       });
     });
-  }
+  },
 };

@@ -2,7 +2,6 @@ const express = require('express');
 
 const router = express.Router();
 const { check } = require('express-validator/check');
-const passport = require('passport');
 const upload = require('../config/multer');
 
 const UserController = require('../controllers/user');
@@ -23,26 +22,26 @@ router.post(
 
 router.get(
   '/profile',
-  passport.authenticate('jwt', { session: false }),
+  // passport.authenticate('jwt', { session: false }),
   UserController.profile
 );
 
 router.put(
   '/changepassword',
-  passport.authenticate('jwt', { session: false }),
+  // passport.authenticate('jwt', { session: false }),
   confirmPassword,
   UserController.changePassword
 );
 
 router.put(
   '/:id',
-  passport.authenticate('jwt', { session: false }),
+  // passport.authenticate('jwt', { session: false }),
   UserController.edit
 );
 
 router.delete(
   '/:id',
-  passport.authenticate('jwt', { session: false }),
+  // passport.authenticate('jwt', { session: false }),
   UserController.delete
 );
 
