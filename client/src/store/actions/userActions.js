@@ -84,7 +84,11 @@ export const signIn = (credentials, ownProps) => {
 export const getAllUsers = () => {
   return dispatch => {
     axios
-      .get(`${url}/api/users/`)
+      .get(`${url}/api/users/`, {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
       .then(response => {
         dispatch(setAllUsers(response.data.users));
       })

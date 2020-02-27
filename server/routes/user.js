@@ -9,7 +9,7 @@ const validations = require('../validations');
 const confirmPassword = require('../middleware/confirmPassword');
 const verifyJWTToken = require('../middleware/verifyJWTToken');
 
-router.get('/', UserController.all);
+router.get('/', verifyJWTToken, UserController.all);
 
 /* POST login. */
 router.post('/login', validations.login(check), UserController.login);
