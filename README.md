@@ -1,4 +1,8 @@
 # auth
+## Logins test user data
+User: testuser@test.com
+Password: test123
+
 ## User Auth managment REST API using:
 1. ExpressJS
 2. Mongoose
